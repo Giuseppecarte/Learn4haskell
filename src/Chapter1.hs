@@ -73,6 +73,7 @@ the `.hs` extension.
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 module Chapter1 where
 import GHC.Base (VecElem(Int16ElemRep))
+import Text.ParserCombinators.ReadP (string)
 
 {- |
 In Haskell, we have __expressions__. Expressions can be represented by some
@@ -557,15 +558,12 @@ value after "=" where the condition is true.
 
 Casual reminder about adding top-level type signatures for all functions :)
 -}
-mid::Ord a => a -> a -> a -> a
+
+mid :: Int -> Int -> Int -> Int
 mid x y z
-    | max_val /= x && min_val /= x = x
-    | max_val /= y && min_val /= y = y
-    | max_val /= z && min_val /= z = z
-    | otherwise  = x
-    where 
-      max_val = max (max x y) z
-      min_val = min (min x y) z
+    | (x >= y && x <= z) || (x <= y && x >= z) = x
+    | (y >= x && y <= z) || (y <= x && y >= z) = y
+    | otherwise = z
 
 {- |
 =⚔️= Task 8
@@ -650,21 +648,21 @@ specifying complex expressions.
 
 sumLast2 :: Int -> Int
 sumLast2 n 
-    | lengthOfString == 1 = n
-    | lengthOfString > 1 = lastDigitInt + previousLastDigitInt
-    where
-      getNumberByNegativeIndex :: Int -> Int-> Int
-      getNumberByNegativeIndex i stringSize = stringSize - i - 1
+    | lengthStringNumber == 1 = abs n
+    | otherwise = lastDigitInt + previousLastDigitInt
+    where 
+      stringNumber = show (abs n)
+      lengthStringNumber = length stringNumber
 
-      lastDigitString = stringNumber !! getNumberByNegativeIndex 0 lengthOfString   
-      previousLastDigitString = stringNumber !! getNumberByNegativeIndex 1 lengthOfString 
+      lastDigitString = stringNumber !! (lengthStringNumber - 1)
+      previousLastDigitString = stringNumber !! (lengthStringNumber - 2)
 
       lastDigitInt = read [lastDigitString] :: Int
       previousLastDigitInt = read [previousLastDigitString] :: Int
 
-      stringNumber = show n
-      lengthOfString = length stringNumber 
+
       
+
 
 
 {- |
@@ -687,7 +685,7 @@ aren't ready for this boss yet!
 firstDigit :: Int -> Int
 firstDigit n = firstValue
     where
-      firstValueString = head (show n)
+      firstValueString = head (show (abs n))
       firstValue = read [firstValueString] :: Int
 
 {-
