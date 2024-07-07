@@ -309,7 +309,7 @@ expressions in GHCi
 -5
 
 >>> 10 - (-5)  -- negative constants require ()
-25
+15
 
 >>> (3 + 5) < 10
 True
@@ -494,7 +494,7 @@ Implement a function that returns the last digit of a given number.
 -}
 -- DON'T FORGET TO SPECIFY THE TYPE IN HERE
 lastDigit :: Int -> Int
-lastDigit n = mod n 10
+lastDigit n = mod (abs n) 10
 
 
 {- |
@@ -562,6 +562,7 @@ mid x y z
     | max_val /= x && min_val /= x = x
     | max_val /= y && min_val /= y = y
     | max_val /= z && min_val /= z = z
+    | otherwise  = x
     where 
       max_val = max (max x y) z
       min_val = min (min x y) z
